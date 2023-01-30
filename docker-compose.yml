@@ -1,0 +1,36 @@
+version: '3.5'
+
+services:
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      -"5432:5432"
+
+    rabbitmq:
+      image: rabbitmq
+      container_name: rabbitmq_container
+      hostname: 'rabbitmq'
+      restart: always
+      expose: 
+      - "15672"
+      - "5672"
+      ports:
+        - "127.0.0.1:15672:15672"
+        - "127.0.0.1:5672:5672"
+      volumes:
+        - ./rabbitmq_data/:/var/lib/rabbitmq
+      ulimites:
+        nofile:
+        soft: 500000
+        hard: 1000000
+      
+  volumes:
+    postgres:
+    pgadmin:
